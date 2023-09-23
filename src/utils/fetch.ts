@@ -25,7 +25,7 @@ export function fakeFetch<TData, TParams extends object = object>(
     try {
       switch (endpoint) {
         case "employees":
-          result = getEmployees() as unknown as TData
+          result = (getEmployees() as unknown) as TData
 
           setTimeout(() => {
             mockApiLogger({ data: { endpoint, params, result } })
@@ -34,8 +34,7 @@ export function fakeFetch<TData, TParams extends object = object>(
           break
 
         case "paginatedTransactions":
-          result = getTransactionsPaginated(params as PaginatedRequestParams) as unknown as TData
-
+          result = (getTransactionsPaginated(params as PaginatedRequestParams) as unknown) as TData
           setTimeout(() => {
             mockApiLogger({ data: { endpoint, params, result } })
             resolve(result)
@@ -43,7 +42,7 @@ export function fakeFetch<TData, TParams extends object = object>(
           break
 
         case "transactionsByEmployee":
-          result = getTransactionsByEmployee(params as RequestByEmployeeParams) as unknown as TData
+          result = (getTransactionsByEmployee(params as RequestByEmployeeParams) as unknown) as TData
 
           setTimeout(() => {
             mockApiLogger({ data: { endpoint, params, result } })
@@ -52,12 +51,9 @@ export function fakeFetch<TData, TParams extends object = object>(
           break
 
         case "setTransactionApproval":
-          result = setTransactionApproval(params as SetTransactionApprovalParams) as unknown as TData
-
-          setTimeout(() => {
-            mockApiLogger({ data: { endpoint, params, result } })
-            resolve(result)
-          }, mockTimeout * 1)
+          result = (setTransactionApproval(params as SetTransactionApprovalParams) as unknown) as TData
+          mockApiLogger({ data: { endpoint, params, result } })
+          resolve(result)
           break
 
         default:
@@ -107,7 +103,7 @@ function mockApiLogger({
 
 function getTimeout() {
   const timeout = parseInt(
-    new URL(document.location as unknown as URL).searchParams.get("timeout") ??
+    new URL((document.location as unknown) as URL).searchParams.get("timeout") ??
       process.env.REACT_APP_TIMEOUT_MULTIPLIER ??
       "1000"
   )
